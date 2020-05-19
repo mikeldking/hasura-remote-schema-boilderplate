@@ -1,0 +1,70 @@
+{
+  "name": "hasura-remote-schema-boilerplate",
+  "version": "0.0.0",
+  "description": "Graphql remote schema for hasura",
+  "main": "src/server.ts",
+  "repository": "git@github.com:mikeldking/hasura-remote-schema.git",
+  "author": "mikeldking@gmail.com",
+  "license": "MIT",
+  "private": true,
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "scripts": {
+    "start": "npm run build && concurrently -k -p '[{name}]' --n='ts,node' -c 'blue.bold,green.bold'  'npm run watch:ts' 'npm run watch'",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "build": "NODE_ENV=production BABEL_ENV=production babel src --out-dir dist --extensions '.ts' --source-maps inline",
+    "watch": "DEBUG=server nodemon -r dotenv/config --delay 3 --inspect --watch ./dist dist/server.js | bunyan -o short -c \"this.widget_type !=='access'\"",
+    "watch:ts": "babel src --out-dir dist --extensions '.ts' --source-maps inline --watch",
+    "typecheck": "tsc --noEmit",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "lint": "npm run typecheck && npm run tslint"
+  },
+  "dependencies": {
+    "apollo-datasource-rest": "^0.6.6",
+    "apollo-server": "^2.9.7",
+    "graphql": "^14.6.0",
+    "graphql-tools": "^4.0.7",
+    "koa": "^2.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-typescript": "^7.8.3",
+    "@types/bunyan": "^1.8.6",
+    "@types/dotenv": "^6.1.1",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.7",
+    "bunyan": "^1.8.12",
+    "concurrently": "^5.0.0",
+    "dotenv": "^8.1.0",
+    "jest": "^25.2.7",
+    "nodemon": "^1.19.3",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.9.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
+    ]
+  }
+}
